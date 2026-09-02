@@ -4,9 +4,8 @@ import { ControlPanel } from "./components/ControlPanel";
 import { Stage } from "./components/Stage";
 import { Toasts, type ToastItem } from "./components/Toasts";
 import { LicenseModal } from "./components/LicenseModal";
-import { LocalAppModal } from "./components/LocalAppModal";
 import {
-  IconCopy, IconCrown, IconDownload, IconFilm, IconLoader, IconLock, IconMoon, IconPackage, IconShield,
+  IconCopy, IconCrown, IconDownload, IconFilm, IconLoader, IconLock, IconMoon, IconShield,
   IconSparkle, IconSun, IconUnlock, IconWand, IconX,
 } from "./components/Icons";
 import { FramedImage, type FrameSettings } from "./components/Frames";
@@ -363,19 +362,19 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [modalOpen, localOpen, images.length]);
 
-  /* ---------- marcos (con puerta PRO) ---------- */
+  /* ---------- marcos (se pueden previsualizar; la exportación es la puerta PRO) ---------- */
   const onPickFrame = useCallback(
     (id: string) => {
       const meta = frameById(id);
-      if (meta?.pro && !licensed) {
-        setModalOpen(true);
-        push("info", `«${meta.name}» es un marco PRO — activa tu licencia`);
-        return;
-      }
       onSettings({ frame: id });
+      if (meta?.pro && !licensed) {
+        push("info", `«${meta.name}» es PRO: puedes previsualizarlo, la exportación requiere licencia`);
+      }
     },
     [licensed, onSettings, push]
   );
+
+  const activeFramePro = !!frameById(effSettings.frame)?.pro;
 
   const onRandom = useCallback(() => {
     const pool = ["meme", "polaroid", "comic", "retro", "tabloid", "vhs", "wanted", "neon", "arcade", "ticket", "gameover", "caution"];
@@ -503,6 +502,11 @@ export default function App() {
     (kind: ExportKind) => {
       if (!activeImage) {
         push("err", "Añade una imagen primero");
+        return;
+      }
+      if (frameById(activeImage ? mergedFor(activeImage).frame : settings.frame)?.pro && !licensed) {
+        setModalOpen(true);
+        push("err", "El marco actual es PRO: activa la licencia para exportar");
         return;
       }
       if ((kind === "png-hd" || kind === "jpg-hd" || kind === "webp-hd" || kind === "copy-hd") && !licensed) {
@@ -634,11 +638,6 @@ export default function App() {
           )}
 
           <span className="hidden h-6 w-px bg-line sm:block" />
-
-          {/* app local */}
-          <button onClick={() => setLocalOpen(true)} aria-label="Descargar app local" title="Llevarte ShotVibe como app local" className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-elev text-[16px] text-mid transition-all duration-150 hover:border-mint-400/70 hover:text-acc2 active:scale-95">
-            <IconPackage />
-          </button>
 
           {/* selector de tema */}
           <div className="relative flex rounded-full border border-line bg-elev p-1" role="group" aria-label="Cambiar tema">
