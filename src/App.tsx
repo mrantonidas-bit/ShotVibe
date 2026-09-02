@@ -74,7 +74,6 @@ export default function App() {
   const [selectedStickerId, setSelectedStickerId] = useState<string | null>(null);
   const [exporting, setExporting] = useState<ExportKind | "batch" | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [localOpen, setLocalOpen] = useState(false);
   const [proMenu, setProMenu] = useState(false);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [dragActive, setDragActive] = useState(false);
@@ -351,7 +350,7 @@ export default function App() {
   /* ---------- teclado: navegar carrusel ---------- */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (modalOpen || localOpen) return;
+      if (modalOpen) return;
       if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
       const t = e.target as HTMLElement | null;
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
@@ -360,7 +359,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [modalOpen, localOpen, images.length]);
+  }, [modalOpen, images.length]);
 
   /* ---------- marcos (se pueden previsualizar; la exportación es la puerta PRO) ---------- */
   const onPickFrame = useCallback(
@@ -504,7 +503,7 @@ export default function App() {
         push("err", "Añade una imagen primero");
         return;
       }
-      if (frameById(activeImage ? mergedFor(activeImage).frame : settings.frame)?.pro && !licensed) {
+      if (frameById(mergedFor(activeImage).frame)?.pro && !licensed) {
         setModalOpen(true);
         push("err", "El marco actual es PRO: activa la licencia para exportar");
         return;
@@ -516,7 +515,7 @@ export default function App() {
       setExporting(kind);
       setJob({ img: activeImage, merged: mergedFor(activeImage), kind });
     },
-    [activeImage, licensed, mergedFor, push]
+    [activeImage, licensed, mergedFor, push, setModalOpen]
   );
 
   const onExportStd = useCallback(() => startExport("png-std"), [startExport]);
@@ -706,6 +705,7 @@ export default function App() {
             onRemoveAt={removeAt}
             onReorder={reorderImages}
             settings={effSettings}
+            proPreview={activeFramePro && !licensed}
             bgCss={bgCss}
             shadowCss={shadowCss}
             stageRef={stageRef}
@@ -743,7 +743,6 @@ export default function App() {
 
       <Toasts items={toasts} onDismiss={(id) => setToasts((t) => t.filter((x) => x.id !== id))} />
       <LicenseModal open={modalOpen} onClose={() => setModalOpen(false)} onUnlocked={onUnlocked} />
-      <LocalAppModal open={localOpen} onClose={() => setLocalOpen(false)} onToast={(k, m) => push(k, m)} />
     </div>
   );
 }

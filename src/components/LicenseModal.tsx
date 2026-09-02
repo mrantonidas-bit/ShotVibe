@@ -6,6 +6,10 @@ import { IconCrown, IconExternal, IconLoader, IconLock, IconShield, IconSparkle,
 type Status = "idle" | "checking" | "ok" | "err";
 const VALID_KEY = "DEMO123";
 
+/* Paleta propia del modal: papel cálido + tinta, alto contraste en cualquier tema */
+const INK = "#171c2b";
+const PAPER = "#fffdf6";
+
 export function LicenseModal({ open, onClose, onUnlocked }: { open: boolean; onClose: () => void; onUnlocked: (key: string) => void }) {
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -41,7 +45,7 @@ export function LicenseModal({ open, onClose, onUnlocked }: { open: boolean; onC
         dy: Math.round(Math.random() * 260 - 130),
         rot: Math.round(Math.random() * 320 - 160),
         delay: +(Math.random() * 0.12).toFixed(2),
-        color: ["#f6bc55", "#2dd4bf", "#f47c7c", "#e8ebf4"][i % 4],
+        color: ["#f6bc55", "#2dd4bf", "#e05a5a", "#171c2b"][i % 4],
       })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [burstKey]
@@ -79,99 +83,168 @@ export function LicenseModal({ open, onClose, onUnlocked }: { open: boolean; onC
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="animate-fade absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => status !== "checking" && !ok && onClose()} />
-      <div className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-2xl border border-line2 bg-panel p-7 shadow-[0_40px_120px_rgba(0,0,0,0.6)] sm:p-8">
-        <div className={cn("pointer-events-none absolute -top-28 left-1/2 size-72 -translate-x-1/2 rounded-full blur-3xl", ok ? "bg-mint-500/20" : "bg-gold-400/15")} />
-        <button onClick={onClose} disabled={status === "checking"} aria-label="Cerrar" className="absolute right-4 top-4 flex size-8 items-center justify-center rounded-lg text-mid transition-colors hover:bg-elev hover:text-hi disabled:opacity-40">
+      <div className="animate-fade absolute inset-0 bg-black/75 backdrop-blur-sm" onClick={() => status !== "checking" && !ok && onClose()} />
+
+      <div
+        key={shakeKey}
+        className={cn(
+          "animate-pop relative max-h-[92vh] w-full max-w-md overflow-y-auto rounded-2xl shadow-[0_40px_120px_rgba(0,0,0,0.65)]",
+          status === "err" && "animate-shake"
+        )}
+        style={{ background: PAPER, color: INK, border: `1px solid ${INK}` }}
+      >
+        {/* ---------- cabecera ---------- */}
+        <div className="relative overflow-hidden px-7 pb-5 pt-6" style={{ background: INK }}>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-10 -top-16 size-44 rounded-full opacity-25 blur-2xl"
+            style={{ background: "#f6bc55" }}
+          />
+          <div className="relative flex items-center gap-3.5">
+            <span
+              className="flex size-12 shrink-0 items-center justify-center rounded-xl text-[22px]"
+              style={{ background: "#f6bc55", color: INK, boxShadow: "0 6px 18px rgba(246,188,85,0.4)" }}
+            >
+              {ok ? <IconUnlock /> : status === "checking" ? <IconLoader className="animate-spin" /> : <IconLock />}
+            </span>
+            <span>
+              <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.22em]" style={{ color: "#f6bc55" }}>
+                <IconCrown className="text-[13px]" /> ShotVibe PRO
+              </span>
+              <span className="font-display mt-0.5 block text-[21px] font-bold leading-tight text-white">
+                {ok ? "¡Licencia activada!" : "Desbloquea todo el potencial"}
+              </span>
+            </span>
+          </div>
+          {/* dientes de ticket */}
+          <span aria-hidden="true" className="absolute -bottom-px left-0 right-0 flex justify-between px-2" style={{ height: 8 }}>
+            {Array.from({ length: 24 }).map((_, i) => (
+              <i key={i} className="size-2 rounded-t-full" style={{ background: PAPER }} />
+            ))}
+          </span>
+
+          {ok &&
+            particles.map((pt, i) => (
+              <span
+                key={`${burstKey}-${i}`}
+                className="particle"
+                style={{ "--dx": `${pt.dx}px`, "--dy": `${pt.dy}px`, "--rot": `${pt.rot}deg`, background: pt.color, animationDelay: `${pt.delay}s` } as CSSProperties}
+              />
+            ))}
+        </div>
+
+        <button
+          onClick={onClose}
+          disabled={status === "checking"}
+          aria-label="Cerrar"
+          className="absolute right-3.5 top-3.5 flex size-8 items-center justify-center rounded-lg text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
+        >
           <IconX />
         </button>
 
-        <div className="relative mb-5 flex justify-center">
-          <div className={cn("relative flex size-16 items-center justify-center rounded-2xl border text-[26px] transition-all duration-500", ok ? "border-mint-500/40 bg-mint-500/10 text-acc2" : "border-gold-500/40 bg-gold-400/10 text-acc", status === "err" && "animate-wiggle")} style={{ animationName: status === "err" ? "shake" : undefined }}>
-            {ok ? <IconUnlock /> : status === "checking" ? <IconLoader className="animate-spin" /> : <IconLock />}
-            {ok &&
-              particles.map((pt, i) => (
-                <span key={`${burstKey}-${i}`} className="particle" style={{ "--dx": `${pt.dx}px`, "--dy": `${pt.dy}px`, "--rot": `${pt.rot}deg`, background: pt.color, animationDelay: `${pt.delay}s` } as CSSProperties} />
-              ))}
-          </div>
-        </div>
-
-        {ok ? (
-          <div className="animate-pop relative text-center">
-            <h2 className="font-display text-2xl font-bold text-hi">¡Licencia activada!</h2>
-            <p className="mt-2 text-sm text-mid">
-              La descarga <span className="font-semibold text-acc">HD 4K</span> y los 80 marcos PRO quedaron desbloqueados en este navegador.
-            </p>
-          </div>
-        ) : (
-          <div className="relative">
-            <div className="text-center">
-              <p className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-gold-500/35 bg-gold-400/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-acc">
-                <IconCrown className="text-[13px]" /> ShotVibe PRO
+        {/* ---------- cuerpo ---------- */}
+        <div className="px-7 pb-6 pt-5">
+          {ok ? (
+            <div className="animate-pop">
+              <p className="text-sm font-medium leading-relaxed" style={{ color: "#3c4356" }}>
+                La descarga <b style={{ color: INK }}>HD 4K</b> y los <b style={{ color: INK }}>70 marcos PRO</b> quedaron
+                desbloqueados en este navegador. ¡A crear!
               </p>
-              <h2 className="font-display text-2xl font-bold leading-tight text-hi">Desbloquea todo el potencial</h2>
-              <p className="mt-2 text-sm leading-relaxed text-mid">
-                Exporta a <b className="text-hi">3840&nbsp;px</b> sin marca de agua y accede a los <b className="text-hi">80 marcos PRO</b> con tu clave de licencia.
-              </p>
+              <div className="mt-4 flex items-center gap-2 rounded-xl px-4 py-3" style={{ background: "#e5f8f2", border: "1.5px solid #23b89f" }}>
+                <IconShield className="shrink-0 text-[16px]" style={{ color: "#128a76" }} />
+                <span className="text-[13px] font-bold" style={{ color: "#128a76" }}>
+                  Licencia guardada en este equipo
+                </span>
+              </div>
             </div>
+          ) : (
+            <>
+              <p className="text-sm leading-relaxed" style={{ color: "#3c4356" }}>
+                Exporta a <b style={{ color: INK }}>3840&nbsp;px</b> sin marca de agua y usa los{" "}
+                <b style={{ color: INK }}>70 marcos PRO</b> con tu clave de licencia.
+              </p>
 
-            <div className="mt-6">
-              <label htmlFor="license-key" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-low">Clave de licencia</label>
-              <input
-                id="license-key"
-                ref={inputRef}
-                value={value}
-                onChange={(e) => {
-                  setValue(e.target.value.toUpperCase());
-                  if (status === "err") setStatus("idle");
-                }}
-                onKeyDown={(e) => e.key === "Enter" && validate("key")}
-                placeholder="XXXX-XXXX-XXXX"
-                spellCheck={false}
-                autoComplete="off"
-                className={cn(
-                  "w-full rounded-xl border bg-page px-4 py-3 text-center font-mono text-base font-semibold uppercase tracking-[0.22em] text-hi placeholder:font-body placeholder:text-sm placeholder:font-normal placeholder:normal-case placeholder:tracking-normal placeholder:text-low focus:outline-none",
-                  status === "err" ? "border-coral-500/70 focus:border-coral-400" : "border-line2 focus:border-gold-500/70"
+              <div className="mt-5">
+                <label htmlFor="license-key" className="mb-1.5 block text-[11px] font-black uppercase tracking-[0.18em]" style={{ color: "#5a6172" }}>
+                  Clave de licencia
+                </label>
+                <input
+                  id="license-key"
+                  ref={inputRef}
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value.toUpperCase());
+                    if (status === "err") setStatus("idle");
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && validate("key")}
+                  placeholder="XXXX-XXXX-XXXX"
+                  spellCheck={false}
+                  autoComplete="off"
+                  className="w-full rounded-xl bg-white px-4 py-3.5 text-center font-mono text-lg font-bold uppercase tracking-[0.22em] outline-none transition-all duration-150 placeholder:font-body placeholder:text-sm placeholder:font-normal placeholder:normal-case placeholder:tracking-normal"
+                  style={{
+                    color: INK,
+                    border: `2px solid ${status === "err" ? "#e05a5a" : INK}`,
+                    boxShadow: status === "err" ? "0 0 0 4px rgba(224,90,90,0.18)" : "0 2px 0 rgba(23,28,43,0.12)",
+                    caretColor: "#c9832a",
+                  }}
+                />
+                {status === "err" && (
+                  <p className="animate-fade mt-2 flex items-center justify-center gap-1.5 text-center text-xs font-bold" style={{ color: "#c23a3a" }}>
+                    <IconX className="text-[13px]" />
+                    {value.trim() ? "Clave no válida. Revisa tu compra o usa la clave demo." : "Escribe una clave antes de validar."}
+                  </p>
                 )}
-              />
-              {status === "err" && (
-                <p className="animate-fade mt-2 text-center text-xs font-medium text-coral-500">
-                  {value.trim() ? "Clave no válida. Revisa tu compra o usa la clave demo." : "Escribe una clave antes de validar."}
+                {status === "checking" && (
+                  <p className="animate-fade mt-2 flex items-center justify-center gap-2 text-center text-xs font-semibold" style={{ color: "#5a6172" }}>
+                    <IconLoader className="animate-spin text-[14px]" style={{ color: "#c9832a" }} /> Consultando la licencia…
+                  </p>
+                )}
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-2.5">
+                <button
+                  onClick={() => validate("key")}
+                  disabled={status === "checking"}
+                  className="flex h-12 items-center justify-center gap-2 rounded-xl text-sm font-black transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(23,28,43,0.35)] active:translate-y-0 active:scale-[0.97] disabled:opacity-60"
+                  style={{ background: INK, color: "#f6bc55" }}
+                >
+                  {status === "checking" ? <IconLoader className="animate-spin" /> : <IconLock />} Validar clave
+                </button>
+                <button
+                  onClick={() => validate("gumroad")}
+                  disabled={status === "checking"}
+                  className="flex h-12 items-center justify-center gap-2 rounded-xl bg-white text-sm font-bold transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(23,28,43,0.18)] active:translate-y-0 active:scale-[0.97] disabled:opacity-60"
+                  style={{ color: INK, border: `2px solid ${INK}` }}
+                >
+                  <IconExternal /> Validar con Gumroad
+                </button>
+              </div>
+
+              <div className="mt-4">
+                <ProBenefitsPanel />
+              </div>
+
+              <div className="mt-4 flex items-start gap-2.5 rounded-xl px-4 py-3" style={{ background: "#fdf3dc", border: "1.5px solid #e8cf9a" }}>
+                <IconSparkle className="mt-0.5 shrink-0 text-[15px]" style={{ color: "#c9832a" }} />
+                <p className="text-xs font-medium leading-relaxed" style={{ color: "#5c4a1e" }}>
+                  ¿Solo quieres probar? Escribe{" "}
+                  <kbd className="rounded-md border-b-2 px-1.5 py-0.5 font-mono text-[11px] font-black" style={{ background: "#fff", borderColor: INK, color: INK }}>
+                    DEMO123
+                  </kbd>{" "}
+                  y valida. Si quieres una licencia permanente,{" "}
+                  <a href="https://gumroad.com" target="_blank" rel="noreferrer" className="font-black underline underline-offset-2" style={{ color: "#128a76" }}>
+                    consíguela en Gumroad
+                  </a>
+                  .
                 </p>
-              )}
-              {status === "checking" && (
-                <p className="animate-fade mt-2 flex items-center justify-center gap-2 text-center text-xs text-mid">
-                  <IconLoader className="animate-spin text-acc" /> Consultando la licencia…
-                </p>
-              )}
-            </div>
+              </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-2.5">
-              <button onClick={() => validate("key")} disabled={status === "checking"} className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gold-500 text-sm font-bold text-[#17130a] shadow-[0_10px_30px_rgba(237,166,59,0.3)] transition-all hover:bg-gold-400 active:scale-[0.97] disabled:opacity-60">
-                {status === "checking" ? <IconLoader className="animate-spin" /> : <IconLock />} Validar clave
-              </button>
-              <button onClick={() => validate("gumroad")} disabled={status === "checking"} className="flex h-11 items-center justify-center gap-2 rounded-xl border border-line2 text-sm font-semibold text-hi transition-all hover:border-mint-400/70 hover:text-acc2 active:scale-[0.97] disabled:opacity-60">
-                <IconExternal /> Validar con Gumroad
-              </button>
-            </div>
-
-            <div className="mt-4">
-              <ProBenefitsPanel />
-            </div>
-
-            <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-line bg-elev px-4 py-3">
-              <IconSparkle className="mt-0.5 shrink-0 text-[15px] text-acc" />
-              <p className="text-xs leading-relaxed text-mid">
-                ¿Solo quieres probar? Escribe <kbd className="sm-kbd mx-0.5">DEMO123</kbd> y valida. Si quieres una licencia permanente,{" "}
-                <a href="https://gumroad.com" target="_blank" rel="noreferrer" className="font-semibold text-acc2 underline-offset-2 hover:underline">consíguela en Gumroad</a>.
+              <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[11px] font-semibold" style={{ color: "#6b7280" }}>
+                <IconShield style={{ color: "#128a76" }} /> La validación ocurre 100% en tu navegador — nada se envía a servidores.
               </p>
-            </div>
-
-            <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[11px] text-low">
-              <IconShield className="text-acc2" /> La validación ocurre 100% en tu navegador — nada se envía a servidores.
-            </p>
-          </div>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

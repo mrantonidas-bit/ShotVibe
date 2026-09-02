@@ -133,6 +133,35 @@ export function ControlPanel(p: ControlPanelProps) {
           </div>
         </section>
 
+        {/* ---------- FORMATO ---------- */}
+        <section className="animate-rise" style={{ animationDelay: "90ms" }}>
+          <SectionTitle icon={<IconRatio />}>Formato</SectionTitle>
+          <div className="grid grid-cols-4 gap-1.5">
+            {ASPECTS.map((a) => {
+              const active = p.photo.aspectId === a.id;
+              return (
+                <button key={a.id} onClick={() => p.onPhoto({ aspectId: a.id })} className={cn("rounded-lg border px-1 py-2 text-center transition-all duration-150 hover:-translate-y-0.5", active ? "border-gold-500 bg-gold-400/10 shadow-[0_0_0_2px_rgba(246,188,85,0.2)]" : "border-line bg-elev hover:border-line2")}>
+                  <span className={cn("block font-mono text-[12px] font-bold", active ? "text-acc" : "text-hi")}>{a.label}</span>
+                  <span className="mt-0.5 block truncate text-[9px] leading-tight text-low">{a.hint}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {p.photo.aspectId !== "free" && (
+            <div className="animate-fade mt-3 space-y-4 rounded-xl border border-line bg-elev/70 p-3">
+              <div className="flex items-center justify-between">
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-low">Ajustar encuadre</p>
+                <button onClick={() => p.onPhoto({ cropX: 50, cropY: 50, cropZoom: 100 })} className="flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] font-semibold text-mid transition-colors hover:bg-panel hover:text-acc"><IconReset className="text-[12px]" /> Centrar</button>
+              </div>
+              <Slider icon={<IconPanH />} label="Horizontal" value={p.photo.cropX} min={0} max={100} step={1} unit="%" onChange={(v) => p.onPhoto({ cropX: v })} />
+              <Slider icon={<IconPanV />} label="Vertical" value={p.photo.cropY} min={0} max={100} step={1} unit="%" onChange={(v) => p.onPhoto({ cropY: v })} />
+              <Slider icon={<IconZoom />} label="Zoom" value={p.photo.cropZoom} min={100} max={200} step={5} unit="%" onChange={(v) => p.onPhoto({ cropZoom: v })} />
+              <p className="text-[10px] leading-relaxed text-low">El encuadre se guarda solo para la foto {p.activeIndex + 1}.</p>
+            </div>
+          )}
+        </section>
+
         {/* ---------- MARCOS ---------- */}
         <section className="animate-rise" style={{ animationDelay: "110ms" }}>
           <SectionTitle
@@ -234,35 +263,6 @@ export function ControlPanel(p: ControlPanelProps) {
             </span>
             {p.bg.kind === "solid" && <IconCheck className="text-[15px] text-acc" />}
           </label>
-        </section>
-
-        {/* ---------- FORMATO ---------- */}
-        <section className="animate-rise" style={{ animationDelay: "240ms" }}>
-          <SectionTitle icon={<IconRatio />}>Formato</SectionTitle>
-          <div className="grid grid-cols-4 gap-1.5">
-            {ASPECTS.map((a) => {
-              const active = p.photo.aspectId === a.id;
-              return (
-                <button key={a.id} onClick={() => p.onPhoto({ aspectId: a.id })} className={cn("rounded-lg border px-1 py-2 text-center transition-all duration-150 hover:-translate-y-0.5", active ? "border-gold-500 bg-gold-400/10 shadow-[0_0_0_2px_rgba(246,188,85,0.2)]" : "border-line bg-elev hover:border-line2")}>
-                  <span className={cn("block font-mono text-[12px] font-bold", active ? "text-acc" : "text-hi")}>{a.label}</span>
-                  <span className="mt-0.5 block truncate text-[9px] leading-tight text-low">{a.hint}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {p.photo.aspectId !== "free" && (
-            <div className="animate-fade mt-3 space-y-4 rounded-xl border border-line bg-elev/70 p-3">
-              <div className="flex items-center justify-between">
-                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-low">Ajustar encuadre</p>
-                <button onClick={() => p.onPhoto({ cropX: 50, cropY: 50, cropZoom: 100 })} className="flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] font-semibold text-mid transition-colors hover:bg-panel hover:text-acc"><IconReset className="text-[12px]" /> Centrar</button>
-              </div>
-              <Slider icon={<IconPanH />} label="Horizontal" value={p.photo.cropX} min={0} max={100} step={1} unit="%" onChange={(v) => p.onPhoto({ cropX: v })} />
-              <Slider icon={<IconPanV />} label="Vertical" value={p.photo.cropY} min={0} max={100} step={1} unit="%" onChange={(v) => p.onPhoto({ cropY: v })} />
-              <Slider icon={<IconZoom />} label="Zoom" value={p.photo.cropZoom} min={100} max={200} step={5} unit="%" onChange={(v) => p.onPhoto({ cropZoom: v })} />
-              <p className="text-[10px] leading-relaxed text-low">El encuadre se guarda solo para la foto {p.activeIndex + 1}.</p>
-            </div>
-          )}
         </section>
 
         {/* ---------- STICKERS ---------- */}

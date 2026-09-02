@@ -1,7 +1,7 @@
 import { IconCheck, IconCrown } from "./Icons";
 
 export const PRO_BENEFITS = [
-  "Los 70 marcos PRO y los 10 exclusivos",
+  "Los 70 marcos PRO (incluidos los 10 exclusivos)",
   "Exportación HD 4K en PNG, JPG y WebP",
   "Copiar al portapapeles en máxima resolución",
   "Exportar el carrusel completo de una sola vez",

@@ -3,7 +3,7 @@ import { ASPECTS, FRAME_META, cn } from "../lib/presets";
 import type { LoadedImage } from "../lib/types";
 import { FramedImage, type FrameSettings } from "./Frames";
 import { StickerLayer } from "./Stickers";
-import { IconChevronL, IconChevronR, IconClipboard, IconDownload, IconImage, IconSparkle, IconSticker, IconTrash, IconUpload, IconWand, IconX } from "./Icons";
+import { IconChevronL, IconChevronR, IconClipboard, IconDownload, IconImage, IconLock, IconSparkle, IconSticker, IconTrash, IconUpload, IconWand, IconX } from "./Icons";
 
 export interface StageProps {
   images: LoadedImage[];
@@ -12,6 +12,7 @@ export interface StageProps {
   onRemoveAt: (i: number) => void;
   onReorder: (from: number, to: number) => void;
   settings: FrameSettings;
+  proPreview: boolean;
   bgCss: string;
   shadowCss: string;
   stageRef: RefObject<HTMLDivElement>;
@@ -60,9 +61,11 @@ export function Stage(p: StageProps) {
           {image ? (
             <div className="relative flex min-h-full min-w-full p-5 md:p-10">
               <div className="m-auto w-full max-w-[1020px]">
-                <div className="relative mx-auto transition-[width,height] duration-200" style={{ width: zoomSize.w ? zoomSize.w * zoom : "auto", height: zoomSize.h ? zoomSize.h * zoom : "auto" }}>
-                  <div className="transition-transform duration-200" style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}>
-                    <div ref={p.stageRef} className="animate-pop mx-auto w-max max-w-full transition-[padding,background] duration-300 ease-out" style={{ background: p.bgCss, padding: effPadding }}>
+                {/* caja de tamaño: anima width/height = tamaño natural × zoom */}
+                <div className="relative mx-auto transition-[width,height] duration-200 ease-out" style={{ width: zoomSize.w ? zoomSize.w * zoom : "auto", height: zoomSize.h ? zoomSize.h * zoom : "auto" }}>
+                  {/* capa escalada: ancho natural explícito para que nada la restrinja (evita el bucle de medición) */}
+                  <div className="transition-transform duration-200 ease-out" style={{ transform: `scale(${zoom})`, transformOrigin: "top left", width: zoomSize.w || "auto" }}>
+                    <div ref={p.stageRef} className="animate-pop w-max transition-[padding,background] duration-300 ease-out" style={{ background: p.bgCss, padding: effPadding }}>
                       <div className="relative">
                         <FramedImage image={image} settings={p.settings} shadowCss={p.shadowCss} />
                         <StickerLayer items={p.settings.stickers} selectedId={p.selectedStickerId} onSelect={p.onSelectSticker} onMove={p.onMoveSticker} />
@@ -122,6 +125,16 @@ export function Stage(p: StageProps) {
             </div>
           )}
         </div>
+
+        {/* aviso de marco PRO en vista previa (no se exporta) */}
+        {image && p.proPreview && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center px-4">
+            <span className="animate-pop flex items-center gap-2 rounded-full border border-gold-500/60 bg-[#17130a]/90 px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-gold-300 shadow-2xl backdrop-blur">
+              <IconLock className="text-[12px]" />
+              Vista previa PRO — la exportación se desbloquea con la licencia
+            </span>
+          </div>
+        )}
 
         {/* ---------- navegación del carrusel ---------- */}
         {image && many && (
