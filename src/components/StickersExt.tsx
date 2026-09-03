@@ -127,6 +127,30 @@ function HandBase({ children }: { children?: ReactNode }) {
 
 const SKIN_HAND = "#fcd7a8";
 const SKIN_LINE = "#b06f2e";
+const SLEEVE = "#38bdf8";
+const SLEEVE_LINE = "#0e7490";
+
+/* dedo tipo cápsula (rectángulo muy redondeado) */
+function Finger({ x, y, w, h, cx, cy, rot }: { x: number; y: number; w: number; h: number; cx: number; cy: number; rot: number }) {
+  return (
+    <rect
+      x={x}
+      y={y}
+      width={w}
+      height={h}
+      rx={w / 2}
+      fill={SKIN_HAND}
+      stroke={SKIN_LINE}
+      strokeWidth="4"
+      transform={rot ? `rotate(${rot} ${cx} ${cy})` : undefined}
+    />
+  );
+}
+
+/* manga / puño de la camisa en la base de la mano */
+function Cuff({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
+  return <rect x={x} y={y} width={w} height={h} rx="6" fill={SLEEVE} stroke={SLEEVE_LINE} strokeWidth="4" />;
+}
 
 /* ------------------------------------------------------------------ */
 /*  glifos nuevos                                                       */
@@ -285,106 +309,162 @@ export function GlyphExt({ type }: { type: StickerType }): ReactNode {
     case "thumbsup":
       return (
         <HandBase>
-          <path d="M30 46h14V30a8 8 0 0 1 16 0v16h16a8 8 0 0 1 0 16h-4a8 8 0 0 1 0 16h-6a8 8 0 0 1-2 15.7H30z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" transform="rotate(180 50 50) translate(0 -8)" />
+          <Cuff x={40} y={80} w={34} h={16} />
+          <Finger x={27} y={14} w={17} h={42} cx={35} cy={50} rot={0} />
+          <rect x={38} y={40} width={40} height={42} rx={13} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M52 50h18M52 58h18M52 66h18" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
         </HandBase>
       );
     case "thumbsdown":
       return (
         <HandBase>
-          <path d="M30 46h14V30a8 8 0 0 1 16 0v16h16a8 8 0 0 1 0 16h-4a8 8 0 0 1 0 16h-6a8 8 0 0 1-2 15.7H30z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" transform="translate(0 8)" />
+          <Cuff x={40} y={4} w={34} h={16} />
+          <rect x={38} y={18} width={40} height={42} rx={13} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M52 28h18M52 36h18M52 44h18" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
+          <Finger x={27} y={44} w={17} h={42} cx={35} cy={50} rot={0} />
         </HandBase>
       );
     case "peace":
       return (
         <HandBase>
-          <path d="M40 50V20a6 6 0 0 1 12 0v26" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M56 48V24a6 6 0 0 1 12 0v24" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M34 46h36a6 6 0 0 1 6 6v14a16 16 0 0 1-16 16H44a14 14 0 0 1-14-14z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
+          <Cuff x={38} y={82} w={28} h={14} />
+          <Finger x={31} y={12} w={15} h={46} cx={38} cy={52} rot={-13} />
+          <Finger x={55} y={12} w={15} h={46} cx={62} cy={52} rot={13} />
+          <rect x={34} y={48} width={36} height={36} rx={13} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M42 58h20M42 66h20" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
         </HandBase>
       );
     case "oksign":
       return (
         <HandBase>
-          <circle cx="40" cy="56" r="14" fill="none" stroke={SKIN_HAND} strokeWidth="12" />
-          <circle cx="40" cy="56" r="14" fill="none" stroke={SKIN_LINE} strokeWidth="4" />
-          <circle cx="40" cy="56" r="20" fill="none" stroke={SKIN_LINE} strokeWidth="4" />
-          <path d="M52 40l14-14M58 50l16-8M58 60l18-2" stroke={SKIN_HAND} strokeWidth="10" strokeLinecap="round" />
-          <path d="M52 40l14-14M58 50l16-8M58 60l18-2" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" fill="none" />
+          <Finger x={56} y={14} w={13} h={34} cx={62} cy={44} rot={18} />
+          <Finger x={68} y={24} w={13} h={34} cx={74} cy={54} rot={34} />
+          <Finger x={74} y={38} w={13} h={32} cx={80} cy={66} rot={52} />
+          <circle cx={38} cy={58} r={13} fill="none" stroke={SKIN_HAND} strokeWidth="13" />
+          <circle cx={38} cy={58} r={19.5} fill="none" stroke={SKIN_LINE} strokeWidth="4" />
+          <circle cx={38} cy={58} r={6.5} fill="none" stroke={SKIN_LINE} strokeWidth="4" />
         </HandBase>
       );
     case "fist":
       return (
         <HandBase>
-          <path d="M28 44a8 8 0 0 1 8-8h4a8 8 0 0 1 8-6 8 8 0 0 1 8 6h4a8 8 0 0 1 8 8v18a18 18 0 0 1-18 18H46a18 18 0 0 1-18-18z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M40 44v26M52 40v30M64 44v24" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
+          <Cuff x={34} y={78} w={36} h={16} />
+          <rect x={26} y={26} width={52} height={54} rx={17} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M39 27v13M52 25v15M65 27v13" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
+          <path d="M28 58c8 8 20 11 30 9" fill="none" stroke={SKIN_LINE} strokeWidth="3.5" strokeLinecap="round" />
         </HandBase>
       );
     case "pointing":
       return (
         <HandBase>
-          <path d="M50 46V14a7 7 0 0 1 14 0v32" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M30 50h34a6 6 0 0 1 0 12h-2a6 6 0 0 1 0 12h-4a6 6 0 0 1-2 11.8H38a14 14 0 0 1-14-14z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" transform="rotate(90 50 60)" />
+          <Cuff x={36} y={82} w={32} h={14} />
+          <Finger x={42} y={10} w={17} h={46} cx={50} cy={30} rot={0} />
+          <rect x={30} y={46} width={44} height={38} rx={14} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M38 56h13M38 64h13M38 72h13" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
         </HandBase>
       );
     case "waving":
       return (
         <HandBase>
-          <path d="M32 60V38a5 5 0 0 1 10 0v14M44 52V26a5 5 0 0 1 10 0v26M56 52V30a5 5 0 0 1 10 0v22M68 56V42a5 5 0 0 1 10 0v18" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="3.5" strokeLinejoin="round" />
-          <path d="M30 56h46a4 4 0 0 1 4 4v6a18 18 0 0 1-18 18H46a16 16 0 0 1-16-16z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
+          <Cuff x={36} y={82} w={32} h={14} />
+          <path d="M14 42c-5 6-5 16 0 22M86 42c5 6 5 16 0 22" fill="none" stroke="#f6bc55" strokeWidth="4" strokeLinecap="round" />
+          <Finger x={24} y={24} w={12} h={36} cx={30} cy={56} rot={-10} />
+          <Finger x={37} y={13} w={13} h={47} cx={43} cy={56} rot={-3} />
+          <Finger x={51} y={10} w={13} h={50} cx={57} cy={56} rot={3} />
+          <Finger x={65} y={16} w={13} h={44} cx={71} cy={56} rot={10} />
+          <rect x={26} y={48} width={52} height={36} rx={15} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
         </HandBase>
       );
     case "rockon":
       return (
         <HandBase>
-          <path d="M36 50V20a6 6 0 0 1 12 0v28" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M62 48V24a6 6 0 0 1 12 0v26" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M32 48h44a4 4 0 0 1 4 4v10a18 18 0 0 1-18 18H46a16 16 0 0 1-16-16z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
+          <Cuff x={38} y={82} w={28} h={14} />
+          <Finger x={28} y={13} w={14} h={44} cx={35} cy={52} rot={-14} />
+          <Finger x={60} y={13} w={14} h={44} cx={67} cy={52} rot={14} />
+          <rect x={33} y={46} width={38} height={38} rx={14} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M43 56h18M43 64h18" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
         </HandBase>
       );
     case "crossed":
       return (
         <HandBase>
-          <path d="M40 62 56 16a6 6 0 0 1 12 3L52 64" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M58 62 42 20a6 6 0 0 0-12 3l15 40" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M36 60h28a4 4 0 0 1 4 4v4a14 14 0 0 1-14 14h-8a14 14 0 0 1-14-14v-4a4 4 0 0 1 4-4z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
+          <Cuff x={38} y={82} w={28} h={14} />
+          <Finger x={52} y={10} w={15} h={48} cx={59} cy={52} rot={-17} />
+          <Finger x={34} y={12} w={15} h={48} cx={41} cy={54} rot={15} />
+          <rect x={32} y={48} width={40} height={36} rx={14} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M40 58h24M40 66h24" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
         </HandBase>
       );
     case "stophand":
       return (
         <HandBase>
-          <path d="M28 52V30a5 5 0 0 1 10 0v16M40 46V20a5 5 0 0 1 10 0v24M52 46V22a5 5 0 0 1 10 0v24M64 52V34a5 5 0 0 1 10 0v20" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="3.5" strokeLinejoin="round" />
-          <path d="M26 50h50a2 2 0 0 1 2 2v8a20 20 0 0 1-20 20H44a18 18 0 0 1-18-18z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
+          <Cuff x={36} y={82} w={32} h={14} />
+          <Finger x={26} y={20} w={12} h={38} cx={32} cy={54} rot={-8} />
+          <Finger x={39} y={11} w={13} h={47} cx={45} cy={54} rot={-2} />
+          <Finger x={52} y={9} w={13} h={49} cx={58} cy={54} rot={2} />
+          <Finger x={65} y={14} w={12} h={44} cx={71} cy={54} rot={8} />
+          <rect x={27} y={46} width={50} height={38} rx={15} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
         </HandBase>
       );
     case "muscle":
       return (
         <HandBase>
-          <path d="M20 70c0-20 12-34 26-34 4-10 16-12 22-4 10 2 14 12 8 20 4 12-6 22-18 22H34a14 14 0 0 1-14-4z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M46 40c8 2 14 10 14 20" fill="none" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
-          <circle cx="70" cy="30" r="7" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path
+            d="M20 82V60c0-5 2-10 6-13 1-13 12-22 23-20 10 2 16 11 14 21 8 3 12 11 9 18-2 8-9 13-17 13H30c-6 0-10-3-10-7z"
+            fill={SKIN_HAND}
+            stroke={SKIN_LINE}
+            strokeWidth="4"
+            strokeLinejoin="round"
+          />
+          <path d="M46 48c9 3 14 11 13 20" fill="none" stroke={SKIN_LINE} strokeWidth="3.5" strokeLinecap="round" />
+          <circle cx={27} cy={42} r={9} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M22 40l4 3 5-6" fill="none" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         </HandBase>
       );
     case "handheart":
       return (
         <HandBase>
-          <path d="M30 40c8-10 22-8 26 2 4-10 18-12 26-2 8 10-2 24-26 38C32 64 22 50 30 40z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M50 30v40" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
+          <path
+            d="M30 64c0-5 9-7 13-9l15-6c6-2 12 2 12 8v9c0 8-6 14-14 14H43c-8 0-13-6-13-12z"
+            fill={SKIN_HAND}
+            stroke={SKIN_LINE}
+            strokeWidth="4"
+            strokeLinejoin="round"
+          />
+          <path d="M38 70h26" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
+          <path
+            d="M50 38c-4-9-16-9-18 0-2 7 5 13 18 21 13-8 20-14 18-21-2-9-14-9-18 0z"
+            fill="#f472b6"
+            stroke="#8f1d5c"
+            strokeWidth="3.5"
+            strokeLinejoin="round"
+          />
         </HandBase>
       );
     case "callme":
       return (
         <HandBase>
-          <path d="M26 30c0-6 8-8 12-2l8 14" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M44 44h22a6 6 0 0 1 6 6v8a20 20 0 0 1-20 20h-6a20 20 0 0 1-20-20v-6z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" />
-          <path d="M72 52c6-2 10-8 10-14" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinecap="round" />
+          <Cuff x={38} y={82} w={30} h={14} />
+          <Finger x={24} y={18} w={15} h={36} cx={31} cy={48} rot={-22} />
+          <Finger x={64} y={30} w={14} h={34} cx={71} cy={58} rot={38} />
+          <rect x={32} y={44} width={42} height={40} rx={15} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          <path d="M42 54h22M42 62h22M42 70h22" stroke={SKIN_LINE} strokeWidth="3" strokeLinecap="round" />
         </HandBase>
       );
     case "clap":
       return (
         <HandBase>
-          <path d="M24 62V34a5 5 0 0 1 10 0v20M36 56V26a5 5 0 0 1 10 0v28" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="3.5" strokeLinejoin="round" transform="rotate(-15 40 50)" />
-          <path d="M22 58h30a4 4 0 0 1 4 4v4a16 16 0 0 1-16 16h-4a16 16 0 0 1-16-16v-4a4 4 0 0 1 2-4z" fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" strokeLinejoin="round" transform="rotate(-15 40 60)" />
-          <path d="M62 30l8-8M70 44h12M64 58l10 6" stroke="#f6bc55" strokeWidth="4" strokeLinecap="round" />
+          <path d="M50 6v11M31 13l6 9M69 13l-6 9" stroke="#f6bc55" strokeWidth="4" strokeLinecap="round" />
+          <g transform="rotate(-15 38 62)">
+            <Finger x={27} y={26} w={11} h={28} cx={32} cy={50} rot={-6} />
+            <Finger x={40} y={22} w={11} h={32} cx={45} cy={50} rot={4} />
+            <rect x={24} y={44} width={32} height={40} rx={14} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          </g>
+          <g transform="rotate(15 62 62)">
+            <Finger x={50} y={22} w={11} h={32} cx={55} cy={50} rot={-4} />
+            <Finger x={63} y={26} w={11} h={28} cx={68} cy={50} rot={6} />
+            <rect x={45} y={44} width={32} height={40} rx={14} fill={SKIN_HAND} stroke={SKIN_LINE} strokeWidth="4" />
+          </g>
         </HandBase>
       );
 
