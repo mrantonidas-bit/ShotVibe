@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { cn } from "../lib/presets";
 import type { StickerItem, StickerType } from "../lib/types";
+import { EXT_GROUPS, EXT_MEMES, GlyphExt } from "./StickersExt";
 
 /* Cada sticker es SVG dibujado a mano: nítido en la exportación 4K. */
 
@@ -100,6 +101,8 @@ function Glyph({ type }: { type: StickerType }) {
       return <svg viewBox="0 0 100 100" width="100%" height="100%"><rect x="8" y="32" width="84" height="36" rx="8" fill="#fff" {...outline} /><text x="50" y="57" textAnchor="middle" fontFamily={IMPACT} fontSize="22" fill="#151a26">BRUH</text><path d="M20 68l-8 14 16-6" fill="#fff" stroke="#151a26" strokeWidth={4} strokeLinejoin="round" /></svg>;
     case "oof":
       return <svg viewBox="0 0 100 100" width="100%" height="100%"><ellipse cx="50" cy="50" rx="42" ry="34" fill="#c4b5fd" stroke="#4c1d95" strokeWidth={4} /><text x="50" y="60" textAnchor="middle" fontFamily={IMPACT} fontSize="28" fill="#4c1d95">OOF</text></svg>;
+    default:
+      return <GlyphExt type={type} />;
   }
 }
 
@@ -123,9 +126,10 @@ const MEME: Array<{ type: StickerType; label: string }> = [
 ];
 export const STICKER_GROUPS = [
   { name: "Clásicos", items: CLASICOS },
-  { name: "Estilo meme", items: MEME },
+  ...EXT_GROUPS,
+  { name: "Estilo meme", items: [...MEME, ...EXT_MEMES] },
 ];
-export const STICKER_LIST = [...CLASICOS, ...MEME];
+export const STICKER_LIST = [...CLASICOS, ...EXT_GROUPS.flatMap((g) => g.items), ...MEME, ...EXT_MEMES];
 
 export function StickerGlyph({ type, size }: { type: StickerType; size: number }) {
   return (

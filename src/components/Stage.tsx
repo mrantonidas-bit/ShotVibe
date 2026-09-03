@@ -59,7 +59,7 @@ export function Stage(p: StageProps) {
           <div className="dot-grid pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
 
           {image ? (
-            <div className="relative flex min-h-full min-w-full p-5 md:p-10">
+            <div className="relative flex min-h-full min-w-full p-3 sm:p-6 lg:p-10">
               <div className="m-auto w-full max-w-[1020px]">
                 {/* caja de tamaño: anima width/height = tamaño natural × zoom */}
                 <div className="relative mx-auto transition-[width,height] duration-200 ease-out" style={{ width: zoomSize.w ? zoomSize.w * zoom : "auto", height: zoomSize.h ? zoomSize.h * zoom : "auto" }}>

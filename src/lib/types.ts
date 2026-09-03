@@ -8,7 +8,22 @@ export type StickerType =
   | "star" | "heart" | "spark" | "arrow" | "flame" | "crown" | "bolt" | "smiley" | "wow" | "like"
   | "moon" | "sun" | "cloud" | "rainbow" | "rocket" | "planet" | "gem" | "trophy" | "medal" | "eye"
   | "infinity" | "music" | "camera" | "coffee" | "pizza" | "cherry" | "flower" | "clover" | "target" | "verified"
-  | "lol" | "cien" | "xd" | "pressf" | "rip" | "sus" | "epico" | "gg" | "bruh" | "oof";
+  | "lol" | "cien" | "xd" | "pressf" | "rip" | "sus" | "epico" | "gg" | "bruh" | "oof"
+  /* caras */
+  | "grin" | "joy" | "wink" | "coolface" | "loveeyes" | "angry" | "sad" | "cry" | "surprised" | "sleepy"
+  | "dizzy" | "silly" | "smirk" | "thinking" | "dead" | "stareyes" | "devil" | "angel" | "clown" | "robot"
+  | "blush" | "zipper" | "partyface" | "melting"
+  /* manos */
+  | "thumbsup" | "thumbsdown" | "peace" | "oksign" | "fist" | "pointing" | "waving" | "rockon" | "crossed"
+  | "stophand" | "muscle" | "handheart" | "callme" | "clap"
+  /* cuerpo */
+  | "eyepair" | "ear" | "nose" | "lips" | "brain" | "tooth" | "tongue" | "bone" | "footprint" | "mustache"
+  | "heartorgan" | "palm"
+  /* objetos clásicos */
+  | "glasses" | "tophat" | "cap" | "bowtie" | "lipstick" | "ring" | "key" | "balloon" | "gift" | "bulb"
+  | "magnet" | "dice" | "watch" | "bell" | "candle" | "anchor" | "umbrella" | "moneybag" | "dollar" | "lollipop"
+  /* memes extra */
+  | "doge" | "trollface" | "pepe" | "thisisfine" | "stonks" | "nyan" | "amongus" | "gigachad" | "lefishe" | "wojak";
 
 export interface StickerItem {
   id: string;
@@ -41,7 +56,6 @@ export const DEFAULT_TEXTS: FrameTexts = {
 
 /* Ajustes globales (marco, fondo, geometría, efectos…) */
 export interface Settings {
-  frame: FrameId;
   radius: number;
   padding: number;
   shadow: number;
@@ -54,7 +68,6 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  frame: "none",
   radius: 18,
   padding: 64,
   shadow: 45,
@@ -68,6 +81,7 @@ export const DEFAULT_SETTINGS: Settings = {
 
 /* Ajustes por foto (formato, encuadre y stickers viven en cada imagen) */
 export interface PhotoSettings {
+  frame: FrameId;
   aspectId: AspectId;
   cropX: number;
   cropY: number;
@@ -76,6 +90,7 @@ export interface PhotoSettings {
 }
 
 export const DEFAULT_PHOTO: PhotoSettings = {
+  frame: "none",
   aspectId: "free",
   cropX: 50,
   cropY: 50,

@@ -163,7 +163,7 @@ export default function App() {
       if (!src) return prev;
       return prev.map((im) => ({ ...im, photo: { ...src.photo } }));
     });
-    push("ok", "Formato, encuadre y stickers aplicados a todas las fotos");
+    push("ok", "Marco, formato, encuadre y stickers aplicados a todas las fotos");
   }, [activeIndex, push]);
 
   /* ---------- stickers ---------- */
@@ -365,12 +365,12 @@ export default function App() {
   const onPickFrame = useCallback(
     (id: string) => {
       const meta = frameById(id);
-      onSettings({ frame: id });
+      onPhoto({ frame: id });
       if (meta?.pro && !licensed) {
         push("info", `«${meta.name}» es PRO: puedes previsualizarlo, la exportación requiere licencia`);
       }
     },
-    [licensed, onSettings, push]
+    [licensed, onPhoto, push]
   );
 
   const activeFramePro = !!frameById(effSettings.frame)?.pro;
@@ -379,10 +379,11 @@ export default function App() {
     const pool = ["meme", "polaroid", "comic", "retro", "tabloid", "vhs", "wanted", "neon", "arcade", "ticket", "gameover", "caution"];
     const frame = pool[Math.floor(Math.random() * pool.length)];
     const preset = BG_PRESETS[Math.floor(Math.random() * BG_PRESETS.length)];
-    onSettings({ frame, rotate: [-6, -3, 0, 0, 0, 3, 6][Math.floor(Math.random() * 7)] });
+    onPhoto({ frame });
+    onSettings({ rotate: [-6, -3, 0, 0, 0, 3, 6][Math.floor(Math.random() * 7)] });
     setBg({ kind: "preset", id: preset.id });
-    push("info", `Marco «${frameById(frame)?.name}» + fondo «${preset.name}» al azar`);
-  }, [onSettings, push]);
+    push("info", `Marco «${frameById(frame)?.name}» + fondo «${preset.name}» al azar (solo esta foto)`);
+  }, [onPhoto, onSettings, push]);
 
   const onReset = useCallback(() => {
     setSettings({ ...DEFAULT_SETTINGS, texts: { ...DEFAULT_SETTINGS.texts } });
@@ -697,7 +698,7 @@ export default function App() {
           onReset={onReset}
           onRandom={onRandom}
         />
-        <section className="order-1 min-h-[42vh] flex-1 lg:order-2 lg:min-h-0">
+        <section className="order-1 h-[56vh] min-h-[360px] shrink-0 lg:order-2 lg:h-auto lg:min-h-0 lg:flex-1">
           <Stage
             images={images}
             activeIndex={activeIndex}

@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { aspectRatio, frameById } from "../lib/presets";
 import type { LoadedImage, PhotoSettings, Settings } from "../lib/types";
+import { DEFAULT_TEXTS } from "../lib/types";
 import { PRO_SERIA } from "./FramesProSeria";
 import { PRO_GRACIOSA } from "./FramesProGraciosa";
 
@@ -43,11 +44,11 @@ export function FramedImage({ image, settings, shadowCss }: { image: LoadedImage
   const ratio = aspectRatio(settings.aspectId);
 
   const img = ratio ? (
-    <div className="relative overflow-hidden" style={ratio >= 1 ? { width: "min(760px, 76vw)", aspectRatio: String(ratio) } : { height: "min(58vh, 620px)", aspectRatio: String(ratio) }}>
+    <div className="relative overflow-hidden" style={ratio >= 1 ? { width: "min(760px, 76vw)", aspectRatio: String(ratio) } : { height: "min(50vh, 620px)", aspectRatio: String(ratio) }}>
       <img src={image.url} alt={image.name} draggable={false} className="absolute inset-0 h-full w-full select-none object-cover" style={{ filter, objectPosition: `${settings.cropX}% ${settings.cropY}%`, transform: settings.cropZoom !== 100 ? `scale(${settings.cropZoom / 100})` : undefined }} />
     </div>
   ) : (
-    <img src={image.url} alt={image.name} draggable={false} className="block h-auto w-auto max-w-full select-none" style={{ maxHeight: "min(58vh, 620px)", filter }} />
+    <img src={image.url} alt={image.name} draggable={false} className="block h-auto w-auto max-w-full select-none" style={{ maxHeight: "min(50vh, 620px)", filter }} />
   );
 
   let card: ReactNode;
@@ -732,13 +733,19 @@ export function FramedImage({ image, settings, shadowCss }: { image: LoadedImage
 /*  miniaturas del selector                                            */
 /* ------------------------------------------------------------------ */
 
-function SpecThumb({ spec }: { spec: SimpleSpec }) {
-  const bd = spec.border ? `${Math.max(1, Math.round(spec.border.w / 2))}px ${spec.border.style ?? "solid"} ${spec.border.color}` : undefined;
+/* Miniatura "en vivo": renderiza el marco PRO real a escala reducida */
+function LiveThumb({ id }: { id: string }) {
+  const renderer = PRO_RENDERERS[id];
+  if (!renderer) return null;
+  const t = DEFAULT_TEXTS;
+  const imgNode = <span className="block" style={{ width: 200, height: 125, background: SCREEN }} />;
   return (
-    <span className="flex h-10 w-full flex-col overflow-hidden rounded-md" style={{ background: spec.bg ?? "var(--sf-elev)", padding: spec.pad ? Math.min(4, Math.round(spec.pad / 4)) : 2, border: bd, borderRadius: spec.radius ? Math.min(7, Math.round(spec.radius / 3)) : 5 }}>
-      {spec.plate?.slot === "top" && <i className="mb-[2px] block h-2 w-full rounded-[1px]" style={{ background: spec.plate.bg }} />}
-      <span className="min-h-0 flex-1 rounded-[2px]" style={{ background: SCREEN, filter: spec.filter, opacity: 0.92, margin: spec.mat ? 2 : 0 }} />
-      {spec.plate?.slot === "bottom" && <i className="mt-[2px] block h-2 w-full rounded-[1px]" style={{ background: spec.plate.bg }} />}
+    <span className="relative block h-10 w-full overflow-hidden rounded-md bg-elev">
+      <span className="absolute left-1/2 top-1/2 block" style={{ transform: "translate(-50%,-50%) scale(0.24)", transformOrigin: "center" }}>
+        <span className="block" style={{ width: 200 }}>
+          {renderer({ img: imgNode, t, r: 8, sh: "none", border: undefined })}
+        </span>
+      </span>
     </span>
   );
 }
@@ -844,8 +851,7 @@ export function FrameThumb({ id }: { id: string }) {
     case "cristal":
       return <span className="relative flex h-10 w-full items-center justify-center overflow-hidden rounded-md border border-white/70 p-[3px]" style={{ background: "linear-gradient(135deg,#ffffff,#e0eafc)" }}><span className="h-full w-full rounded-[4px] border border-[#b4c8e6]" style={{ background: SCREEN }} /><span className="absolute inset-0" style={{ background: "linear-gradient(115deg, rgba(255,255,255,0.7) 0%, transparent 40%)" }} /></span>;
     default: {
-      const spec = frameById(id)?.spec;
-      if (spec) return <SpecThumb spec={spec} />;
+      if (PRO_RENDERERS[id]) return <LiveThumb id={id} />;
       return <span className="block h-10 w-full rounded-md border-2 border-dashed border-line2" style={{ background: SCREEN, opacity: 0.8 }} />;
     }
   }

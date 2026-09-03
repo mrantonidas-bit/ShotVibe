@@ -69,11 +69,11 @@ export function ControlPanel(p: ControlPanelProps) {
   const [thumbDrag, setThumbDrag] = useState<number | null>(null);
   const [thumbOver, setThumbOver] = useState<number | null>(null);
   const hasImages = p.images.length > 0;
-  const frameMeta = FRAME_META.find((f) => f.id === p.settings.frame);
+  const frameMeta = FRAME_META.find((f) => f.id === p.photo.frame);
   const selectedSticker = p.photo.stickers.find((s) => s.id === p.selectedStickerId) ?? null;
 
   return (
-    <aside className="order-2 z-10 flex h-[46vh] w-full shrink-0 flex-col overflow-hidden border-t border-line bg-panel/60 backdrop-blur-sm lg:order-1 lg:h-auto lg:w-[332px] lg:border-r lg:border-t-0 xl:w-[354px]">
+    <aside className="order-2 z-10 flex min-h-0 w-full flex-1 flex-col overflow-hidden border-t border-line bg-panel/60 backdrop-blur-sm lg:order-1 lg:h-auto lg:w-[332px] lg:flex-none lg:border-r lg:border-t-0 xl:w-[354px]">
       <div className="flex-1 space-y-8 overflow-y-auto p-5">
         {/* ---------- IMAGEN / CARRUSEL ---------- */}
         <section className="animate-rise" style={{ animationDelay: "40ms" }}>
@@ -192,7 +192,7 @@ export function ControlPanel(p: ControlPanelProps) {
                 </div>
                 <div className="grid grid-cols-5 gap-1.5">
                   {list.map((f) => {
-                    const active = p.settings.frame === f.id;
+                    const active = p.photo.frame === f.id;
                     const locked = !!f.pro && !p.licensed;
                     return (
                       <button
@@ -219,7 +219,9 @@ export function ControlPanel(p: ControlPanelProps) {
               </div>
             );
           })}
-          <p className="mt-1 text-[11px] text-low">Los marcos con <IconLock className="inline text-[10px] text-acc" /> requieren la licencia PRO.</p>
+          <p className="mt-1 text-[11px] text-low">
+            El marco se aplica a la foto {p.activeIndex + 1}. Los que llevan <IconLock className="inline text-[10px] text-acc" /> son PRO.
+          </p>
         </section>
 
         {/* ---------- TEXTOS DEL MARCO ---------- */}
@@ -278,10 +280,10 @@ export function ControlPanel(p: ControlPanelProps) {
           {STICKER_GROUPS.map((grp) => (
             <div key={grp.name} className="mb-3 last:mb-0">
               <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-low">{grp.name} · {grp.items.length}</p>
-              <div className="grid grid-cols-10 gap-1">
+              <div className="grid grid-cols-8 gap-1.5">
                 {grp.items.map((s) => (
                   <button key={s.type} onClick={() => p.onAddSticker(s.type)} title={s.label} aria-label={`Añadir sticker ${s.label}`} className="flex aspect-square items-center justify-center rounded-md border border-line bg-elev p-1 transition-all duration-150 hover:scale-110 hover:border-gold-500/60 hover:shadow-md active:scale-95">
-                    <StickerGlyph type={s.type} size={22} />
+                    <StickerGlyph type={s.type} size={26} />
                   </button>
                 ))}
               </div>
