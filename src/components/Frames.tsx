@@ -1,6 +1,10 @@
 import type { CSSProperties, ReactNode } from "react";
-import { aspectRatio, FRAME_META, frameById, cn, type SimpleSpec } from "../lib/presets";
-import type { FrameTexts, LoadedImage, PhotoSettings, Settings } from "../lib/types";
+import { aspectRatio, frameById } from "../lib/presets";
+import type { LoadedImage, PhotoSettings, Settings } from "../lib/types";
+import { PRO_SERIA } from "./FramesProSeria";
+import { PRO_GRACIOSA } from "./FramesProGraciosa";
+
+const PRO_RENDERERS: Record<string, (c: import("./framebits").FrameCtx) => ReactNode> = { ...PRO_SERIA, ...PRO_GRACIOSA };
 
 export type FrameSettings = Settings & PhotoSettings;
 
@@ -27,48 +31,7 @@ const memeOutline: CSSProperties = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  marco genérico guiado por datos (marcos PRO)                       */
-/* ------------------------------------------------------------------ */
-
-function SimpleFrame({ spec, img, r, sh, border, t }: { spec: SimpleSpec; img: ReactNode; r: number; sh: string; border?: string; t: FrameTexts }) {
-  const radius = spec.radius ?? r;
-  const bd = border ?? (spec.border ? `${spec.border.w}px ${spec.border.style ?? "solid"} ${spec.border.color}` : undefined);
-  const pad = spec.pad ?? (spec.bg || spec.border ? 12 : 0);
-  const mediaRadius = Math.max(radius - pad - (spec.mat?.w ?? 0) - (bd ? 2 : 0), 0);
-  const plate = spec.plate ? (
-    <div className="flex items-center justify-center overflow-hidden px-4" style={{ height: 46, background: spec.plate.bg }}>
-      <span
-        className="truncate font-bold uppercase"
-        style={{
-          color: spec.plate.color,
-          fontFamily: spec.plate.font === "mono" ? MONO : spec.plate.font === "impact" ? IMPACT : spec.plate.font === "serif" ? SERIF : SANS,
-          letterSpacing: spec.plate.ls ?? 1.5,
-          fontSize: spec.plate.size ?? 14,
-        }}
-      >
-        {t[spec.plate.key]}
-      </span>
-    </div>
-  ) : null;
-
-  return (
-    <div className="transition-[border-radius,box-shadow] duration-300" style={{ background: spec.bg, padding: pad, borderRadius: radius, boxShadow: sh, border: bd }}>
-      {spec.plate?.slot === "top" && plate}
-      <div style={spec.mat ? { background: spec.mat.color, padding: spec.mat.w, borderRadius: Math.max(mediaRadius + 2, 0) } : undefined}>
-        <div className="overflow-hidden" style={{ borderRadius: mediaRadius }}>
-          <div className="relative w-max max-w-full" style={spec.filter ? { filter: spec.filter } : undefined}>
-            {img}
-            {spec.overlay && <span aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: spec.overlay }} />}
-          </div>
-        </div>
-      </div>
-      {spec.plate?.slot === "bottom" && plate}
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  marcos hechos a mano                                               */
+/*  marcos hechos a mano (+ PRO temáticos en FramesPro*)               */
 /* ------------------------------------------------------------------ */
 
 export function FramedImage({ image, settings, shadowCss }: { image: LoadedImage; settings: FrameSettings; shadowCss: string }) {
@@ -749,9 +712,9 @@ export function FramedImage({ image, settings, shadowCss }: { image: LoadedImage
 
     /* ============ por datos / sin marco ============ */
     default: {
-      const spec = frameById(settings.frame)?.spec;
-      card = spec ? (
-        <SimpleFrame spec={spec} img={img} r={r} sh={sh} border={border} t={t} />
+      const render = PRO_RENDERERS[settings.frame];
+      card = render ? (
+        render({ img, t, r, sh, border })
       ) : (
         <div className="overflow-hidden transition-[border-radius,box-shadow] duration-300" style={{ borderRadius: r, boxShadow: sh, border }}>{img}</div>
       );

@@ -90,34 +90,14 @@ export function slugify(s: string): string {
 export const cn = (...xs: Array<string | false | null | undefined>) => xs.filter(Boolean).join(" ");
 
 /* ------------------------------------------------------------------ */
-/*  marcos                                                             */
+/*  marcos · 110 en total                                              */
 /* ------------------------------------------------------------------ */
-
-export interface SimpleSpec {
-  bg?: string;
-  pad?: number;
-  border?: { w: number; style?: string; color: string };
-  radius?: number;
-  mat?: { color: string; w: number };
-  filter?: string;
-  overlay?: string;
-  plate?: {
-    slot: "top" | "bottom";
-    key: keyof FrameTexts;
-    bg: string;
-    color: string;
-    font?: "sans" | "mono" | "impact" | "serif";
-    ls?: number;
-    size?: number;
-  };
-}
 
 export interface FrameMeta {
   id: FrameId;
   name: string;
   kind: "seria" | "graciosa" | "exclusiva";
   pro?: boolean;
-  spec?: SimpleSpec;
   texts?: Array<{ key: keyof FrameTexts; placeholder: string }>;
 }
 
@@ -168,69 +148,69 @@ export const FRAME_META: FrameMeta[] = [
   { id: "price", name: "Rebajas", kind: "graciosa", texts: [txt("top", "-50%"), txt("tag", "Solo hoy")] },
   { id: "postal", name: "Postal", kind: "graciosa", texts: [txt("subtitle", "¡Saludos desde aquí!"), txt("tag", "2026")] },
 
-  /* ================= SERIA · PRO (30) ================= */
-  { id: "sepia", name: "Archivo", kind: "seria", pro: true, spec: { bg: "#f7f2e7", pad: 14, border: { w: 4, style: "double", color: "#8a6f3c" }, mat: { color: "#fffdf6", w: 10 }, filter: "sepia(0.45) contrast(1.02)" } },
-  { id: "ejecutivo", name: "Ejecutivo", kind: "seria", pro: true, spec: { bg: "#0f1728", pad: 12, border: { w: 2, color: "#e3b04b" } } },
-  { id: "paspartu", name: "Paspartú", kind: "seria", pro: true, spec: { bg: "#ffffff", pad: 8, mat: { color: "#ffffff", w: 26 }, border: { w: 1, color: "#d9dee8" } } },
-  { id: "doblefilete", name: "Doble filete", kind: "seria", pro: true, spec: { bg: "#fbfaf7", pad: 16, border: { w: 6, style: "double", color: "#232a3b" } } },
-  { id: "cabecera", name: "Cabecera", kind: "seria", pro: true, spec: { pad: 0, plate: { slot: "top", key: "title", bg: "#0e1626", color: "#ffffff", ls: 2, size: 15 } }, texts: [txt("title", "Cabecera del documento")] },
-  { id: "informe", name: "Informe", kind: "seria", pro: true, spec: { pad: 0, plate: { slot: "bottom", key: "title", bg: "#0e1626", color: "#e8ecf6", ls: 1, size: 14 } }, texts: [txt("title", "Título del informe")] },
-  { id: "cromo", name: "Cromo", kind: "seria", pro: true, spec: { bg: "linear-gradient(135deg,#e8ebf0,#b9c0cc 45%,#eef1f5 70%,#a9b1bf)", pad: 9 } },
-  { id: "grafito2", name: "Grafito", kind: "seria", pro: true, spec: { bg: "#24282f", pad: 12, border: { w: 2, color: "#3a404b" } } },
-  { id: "marfil", name: "Marfil", kind: "seria", pro: true, spec: { bg: "#f6f0e3", pad: 14, border: { w: 2, color: "#d9c9a3" } } },
-  { id: "lino", name: "Lino", kind: "seria", pro: true, spec: { bg: "#ecebe5", pad: 8, mat: { color: "#ffffff", w: 14 } } },
-  { id: "terciopelo", name: "Terciopelo", kind: "seria", pro: true, spec: { bg: "#3a1d31", pad: 12, border: { w: 2, color: "#7a4465" } } },
-  { id: "roble", name: "Roble", kind: "seria", pro: true, spec: { bg: "linear-gradient(135deg,#8a5a33,#6d4426)", pad: 14 } },
-  { id: "pizarra", name: "Pizarra", kind: "seria", pro: true, spec: { bg: "#2e3b37", pad: 12, border: { w: 2, style: "dashed", color: "#cfe0d8" } } },
-  { id: "academia", name: "Academia", kind: "seria", pro: true, spec: { bg: "#fbf7ec", pad: 14, border: { w: 5, style: "double", color: "#b08d2e" } } },
-  { id: "ministerio", name: "Ministerio", kind: "seria", pro: true, spec: { pad: 0, filter: "sepia(0.2)", plate: { slot: "top", key: "top", bg: "#1d2433", color: "#ffffff", ls: 3, size: 13 } }, texts: [txt("top", "MINISTERIO DE ESTILO")] },
-  { id: "acero", name: "Acero", kind: "seria", pro: true, spec: { bg: "linear-gradient(135deg,#cfd6df,#9aa3b0)", pad: 8 } },
-  { id: "carbon2", name: "Carbón", kind: "seria", pro: true, spec: { bg: "#17191d", pad: 12, border: { w: 5, color: "#2e333b" } } },
-  { id: "niebla", name: "Niebla", kind: "seria", pro: true, spec: { bg: "#ffffff", pad: 8, mat: { color: "#eef1f5", w: 16 }, filter: "grayscale(0.65) brightness(1.04)" } },
-  { id: "periodico", name: "Periódico", kind: "seria", pro: true, spec: { bg: "#f3f0e9", pad: 10, border: { w: 1, color: "#17191d" }, filter: "grayscale(1) contrast(1.12)", plate: { slot: "bottom", key: "subtitle", bg: "#17191d", color: "#f3f0e9", size: 13 } }, texts: [txt("subtitle", "Sección de sociedad")] },
-  { id: "sello", name: "Sello", kind: "seria", pro: true, spec: { bg: "#fdf6ef", pad: 12, border: { w: 3, style: "dotted", color: "#b3452f" } } },
-  { id: "memorando", name: "Memorando", kind: "seria", pro: true, spec: { pad: 0, plate: { slot: "top", key: "top", bg: "#ffffff", color: "#17191d", font: "mono", ls: 2, size: 12 } }, texts: [txt("top", "MEMO Nº 042")] },
-  { id: "registro", name: "Registro", kind: "seria", pro: true, spec: { bg: "#f8f4ea", pad: 12, border: { w: 2, style: "dashed", color: "#a08c5c" }, filter: "sepia(0.3)" } },
-  { id: "lamina", name: "Lámina", kind: "seria", pro: true, spec: { bg: "#ffffff", pad: 10, mat: { color: "#ffffff", w: 22 }, border: { w: 4, style: "double", color: "#8d97ad" } } },
-  { id: "cobre", name: "Cobre", kind: "seria", pro: true, spec: { bg: "linear-gradient(135deg,#d9985f,#a9622f)", pad: 10 } },
-  { id: "botanico", name: "Botánico", kind: "seria", pro: true, spec: { bg: "#1e3b2f", pad: 12, border: { w: 2, color: "#4a7a5f" } } },
-  { id: "vinotinto", name: "Vino", kind: "seria", pro: true, spec: { bg: "#3b1420", pad: 12, border: { w: 2, color: "#7a3550" } } },
-  { id: "cielo2", name: "Cielo", kind: "seria", pro: true, spec: { bg: "#e8f1f8", pad: 12, border: { w: 2, color: "#b9d4e8" } } },
-  { id: "arena", name: "Arena", kind: "seria", pro: true, spec: { bg: "#e9dfc8", pad: 12, border: { w: 2, color: "#b8a67e" } } },
-  { id: "contorno", name: "Contorno", kind: "seria", pro: true, spec: { pad: 12, border: { w: 3, color: "#14161c" } } },
-  { id: "cinta", name: "Cinta", kind: "seria", pro: true, spec: { pad: 0, plate: { slot: "bottom", key: "title", bg: "linear-gradient(90deg,#f6bc55,#e05a5a)", color: "#14161c", ls: 3, size: 14 } }, texts: [txt("title", "TÍTULO")] },
+  /* ================= SERIA · PRO (30) — temáticos y virales ================= */
+  { id: "pitch", name: "Pitch Deck", kind: "seria", pro: true, texts: [txt("title", "Título de la diapositiva"), txt("tag", "01 / 12")] },
+  { id: "hud", name: "HUD", kind: "seria", pro: true, texts: [txt("tag", "X:0042 · Y:0113")] },
+  { id: "brutalist", name: "Brutalist", kind: "seria", pro: true, texts: [txt("title", "SIN TÍTULO"), txt("badge", "EST. 2026")] },
+  { id: "notion", name: "Documento", kind: "seria", pro: true, texts: [txt("title", "Mi documento"), txt("tag", "editado hace 2 min")] },
+  { id: "filmstrip", name: "Negativo", kind: "seria", pro: true, texts: [txt("tag", "400TX ▸ 24A")] },
+  { id: "blueprint", name: "Plano", kind: "seria", pro: true, texts: [txt("title", "Proyecto Aurora"), txt("tag", "ESC 1:100")] },
+  { id: "terminal", name: "Terminal", kind: "seria", pro: true, texts: [txt("title", "shotvibe render --4k")] },
+  { id: "player", name: "Reproductor", kind: "seria", pro: true, texts: [txt("title", "Mi captura (Remix)"), txt("subtitle", "ShotVibe Records")] },
+  { id: "foco", name: "Foco", kind: "seria", pro: true, texts: [txt("title", "Obra en exposición"), txt("subtitle", "sala 3 · pared norte")] },
+  { id: "scrapbook", name: "Scrapbook", kind: "seria", pro: true, texts: [txt("subtitle", "recuerdos pegados con cariño")] },
+  { id: "yearbook", name: "Anuario", kind: "seria", pro: true, texts: [txt("title", "Promoción Estelar"), txt("tag", "clase de 2026")] },
+  { id: "vinyl", name: "Vinilo", kind: "seria", pro: true, texts: [txt("title", "Lado B"), txt("subtitle", "33⅓ RPM")] },
+  { id: "invitation", name: "Invitación", kind: "seria", pro: true, texts: [txt("title", "Estás invitado"), txt("subtitle", "gala de estilo · 21:00")] },
+  { id: "herbario", name: "Herbario", kind: "seria", pro: true, texts: [txt("title", "Specimen capturus"), txt("tag", "Nº 042")] },
+  { id: "academia", name: "Dark Academia", kind: "seria", pro: true, texts: [txt("title", "Biblioteca Central"), txt("subtitle", "sección restringida")] },
+  { id: "chrome", name: "Cromo 2000", kind: "seria", pro: true, texts: [txt("badge", "CHROME EDITION")] },
+  { id: "holocard", name: "Tarjeta Holo", kind: "seria", pro: true, texts: [txt("badge", "EDICIÓN LIMITADA"), txt("tag", "042/500")] },
+  { id: "neonwall", name: "Muro Neón", kind: "seria", pro: true, texts: [txt("title", "abierto toda la noche")] },
+  { id: "crt", name: "Monitor CRT", kind: "seria", pro: true, texts: [txt("tag", "VIBETRON 2100")] },
+  { id: "clipping", name: "Recorte", kind: "seria", pro: true, texts: [txt("top", "EL DIARIO"), txt("title", "LA CAPTURA DEL AÑO")] },
+  { id: "cork", name: "Corcho", kind: "seria", pro: true, texts: [txt("subtitle", "no olvidar: esto es arte")] },
+  { id: "moodboard", name: "Moodboard", kind: "seria", pro: true, texts: [txt("title", "paleta · invierno 26")] },
+  { id: "expediente", name: "Expediente", kind: "seria", pro: true, texts: [txt("title", "Caso: estilo perdido"), txt("badge", "APROBADO")] },
+  { id: "slide35", name: "Diapositiva", kind: "seria", pro: true, texts: [txt("tag", "Nº 07")] },
+  { id: "luxdark", name: "Noir", kind: "seria", pro: true, texts: [txt("subtitle", "una pieza en la oscuridad")] },
+  { id: "polarstack", name: "Polaroids", kind: "seria", pro: true, texts: [txt("subtitle", "aquella tarde")] },
+  { id: "passport", name: "Pasaporte", kind: "seria", pro: true, texts: [txt("title", "ESTELAR"), txt("tag", "SVB")] },
+  { id: "magad", name: "Anuncio", kind: "seria", pro: true, texts: [txt("title", "El marco que tu captura merece"), txt("tag", "pág. 42")] },
+  { id: "camera", name: "Visor", kind: "seria", pro: true, texts: [txt("tag", "ISO 400 · f/1.8 · 1/250")] },
+  { id: "onyx", name: "Ónix", kind: "seria", pro: true, texts: [txt("title", "COLECCIÓN ORO"), txt("badge", "SÉRIE 042")] },
 
-  /* ================= GRACIOSA · PRO (30) ================= */
-  { id: "neonrosa", name: "Neón rosa", kind: "graciosa", pro: true, spec: { bg: "#12080f", pad: 12, border: { w: 3, color: "#ff4fd8" }, radius: 18 } },
-  { id: "neonverde", name: "Neón verde", kind: "graciosa", pro: true, spec: { bg: "#06110c", pad: 12, border: { w: 3, color: "#3dff8f" }, radius: 18 } },
-  { id: "neonazul", name: "Neón azul", kind: "graciosa", pro: true, spec: { bg: "#070b14", pad: 12, border: { w: 3, color: "#38bdf8" }, radius: 18 } },
-  { id: "caramelo", name: "Caramelo", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#ff9a9e,#fad0c4)", pad: 14, radius: 22 } },
-  { id: "chicle", name: "Chicle", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#f78fb3,#f8a5c2)", pad: 14, border: { w: 4, color: "#ffffff" }, radius: 24 } },
-  { id: "banana", name: "Banana", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#ffe259,#ffa751)", pad: 14 } },
-  { id: "uva", name: "Uva", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#8e2de2,#4a00e0)", pad: 14 } },
-  { id: "sorbete", name: "Sorbete", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#a8edea,#fed6e3)", pad: 14 } },
-  { id: "mentita", name: "Menta", kind: "graciosa", pro: true, spec: { bg: "#dff5ec", pad: 14, border: { w: 3, color: "#7fd8be" } } },
-  { id: "lava", name: "Lava", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#f83600,#f9d423)", pad: 12 } },
-  { id: "hielo", name: "Hielo", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#e0eafc,#cfdef3)", pad: 14 } },
-  { id: "bosque2", name: "Bosque", kind: "graciosa", pro: true, spec: { bg: "#14301f", pad: 12, border: { w: 2, color: "#3f7a52" } } },
-  { id: "atardecer2", name: "Atardecer", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(180deg,#ff9966,#ff5e62)", pad: 12 } },
-  { id: "popdots", name: "Pop dots", kind: "graciosa", pro: true, spec: { bg: "radial-gradient(#14161c 1.2px, transparent 1.3px) 0 0 / 9px 9px, #ff7bac", pad: 14, border: { w: 3, color: "#14161c" } } },
-  { id: "vhsazul", name: "VHS azul", kind: "graciosa", pro: true, spec: { bg: "#0d1b2a", pad: 12, border: { w: 2, color: "#41a0ff" }, filter: "saturate(1.25) contrast(1.05)" } },
-  { id: "vintage", name: "Vintage", kind: "graciosa", pro: true, spec: { bg: "#efe3c8", pad: 14, border: { w: 4, style: "double", color: "#8a6f3c" }, filter: "sepia(0.7) contrast(0.95)" } },
-  { id: "noir", name: "Noir", kind: "graciosa", pro: true, spec: { bg: "#0c0d10", pad: 8, mat: { color: "#0c0d10", w: 10 }, filter: "grayscale(1) contrast(1.25)" } },
-  { id: "kitsch", name: "Kitsch 80s", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#fc466b,#3f5efb)", pad: 14 } },
-  { id: "y2k", name: "Y2K", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#f6d5f7,#fbe9d7)", pad: 12, border: { w: 2, color: "#c084fc" } } },
-  { id: "globo", name: "Globo", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#89f7fe,#66a6ff)", pad: 14 } },
-  { id: "confetipro", name: "Confeti PRO", kind: "graciosa", pro: true, spec: { bg: "radial-gradient(#f6bc55 1.5px, transparent 2px) 0 0 / 10px 9px, radial-gradient(#2dd4bf 1.5px, transparent 2px) 5px 5px / 12px 11px, #ffffff", pad: 16, border: { w: 3, color: "#14161c" } } },
-  { id: "rayas", name: "Rayas", kind: "graciosa", pro: true, spec: { bg: "repeating-linear-gradient(45deg,#ffd3e0 0 10px,#ffffff 10px 20px)", pad: 16 } },
-  { id: "gelatina", name: "Gelatina", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#43e97b,#38f9d7)", pad: 14, radius: 26 } },
-  { id: "soda", name: "Soda", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(135deg,#fa709a,#fee140)", pad: 13 } },
-  { id: "mostaza", name: "Mostaza", kind: "graciosa", pro: true, spec: { bg: "#e8b723", pad: 12, border: { w: 3, color: "#14161c" } } },
-  { id: "salmon", name: "Salmón", kind: "graciosa", pro: true, spec: { bg: "#ffdab9", pad: 13, border: { w: 2, color: "#e07a5f" } } },
-  { id: "pistacho", name: "Pistacho", kind: "graciosa", pro: true, spec: { bg: "#d9e8c9", pad: 13, border: { w: 2, color: "#8aa86e" } } },
-  { id: "medianoche", name: "Medianoche", kind: "graciosa", pro: true, spec: { bg: "#101828", pad: 12, border: { w: 2, color: "#3d5a80" }, plate: { slot: "bottom", key: "subtitle", bg: "#3d5a80", color: "#e0fbfc", size: 13 } }, texts: [txt("subtitle", "una noche más")] },
-  { id: "tebeo", name: "Tebeo", kind: "graciosa", pro: true, spec: { bg: "#fff3b0", pad: 12, border: { w: 4, color: "#14161c" }, radius: 6 } },
-  { id: "vaporwave", name: "Vaporwave", kind: "graciosa", pro: true, spec: { bg: "linear-gradient(180deg,#1a0533,#5b2a86 55%,#ff6ec7)", pad: 12, filter: "saturate(1.3)" } },
+  /* ================= GRACIOSA · PRO (30) — cultura meme ================= */
+  { id: "win95", name: "Windows 95", kind: "graciosa", pro: true, texts: [txt("title", "shotvibe.exe"), txt("tag", "100%")] },
+  { id: "popup", name: "Pop-up", kind: "graciosa", pro: true, texts: [txt("title", "¡HAS GANADO!"), txt("badge", "1.000.000 de likes")] },
+  { id: "achievement", name: "Logro", kind: "graciosa", pro: true, texts: [txt("title", "Captura legendaria"), txt("tag", "+20G")] },
+  { id: "rpg", name: "Diálogo RPG", kind: "graciosa", pro: true, texts: [txt("title", "HÉROE"), txt("subtitle", "¡Tu captura subió al nivel 99!")] },
+  { id: "trading", name: "Carta", kind: "graciosa", pro: true, texts: [txt("title", "CAPTURACHO"), txt("tag", "HP 999"), txt("subtitle", "Destello Estelar")] },
+  { id: "manga", name: "Manga", kind: "graciosa", pro: true, texts: [txt("top", "¡DON!"), txt("tag", "CONTINUARÁ…")] },
+  { id: "deepfried", name: "Frito", kind: "graciosa", pro: true, texts: [txt("badge", "calidad 144p")] },
+  { id: "camcorder", name: "Cámara 2004", kind: "graciosa", pro: true, texts: [txt("tag", "01.01.04 · 00:14")] },
+  { id: "dvd", name: "DVD", kind: "graciosa", pro: true, texts: [txt("title", "DVD"), txt("tag", "ESQUINA: 0")] },
+  { id: "loading", name: "Cargando", kind: "graciosa", pro: true, texts: [txt("title", "instalando estilo…")] },
+  { id: "error", name: "Pantalla azul", kind: "graciosa", pro: true, texts: [txt("title", "tu captura fue demasiado estética"), txt("tag", "CÓDIGO: GUAY_EXCESS")] },
+  { id: "stickerbomb", name: "Sticker Bomb", kind: "graciosa", pro: true },
+  { id: "memphis", name: "Memphis 84", kind: "graciosa", pro: true },
+  { id: "disco", name: "Disco", kind: "graciosa", pro: true, texts: [txt("title", "fiebre del sábado")] },
+  { id: "candy", name: "Caramelo", kind: "graciosa", pro: true, texts: [txt("badge", "¡DULCE!")] },
+  { id: "kawaii", name: "Kawaii", kind: "graciosa", pro: true, texts: [txt("subtitle", "muy uwu")] },
+  { id: "gamer", name: "RGB Gamer", kind: "graciosa", pro: true, texts: [txt("tag", "240 FPS")] },
+  { id: "graffiti", name: "Grafiti", kind: "graciosa", pro: true, texts: [txt("title", "VIBE KING")] },
+  { id: "slot", name: "Tragamonedas", kind: "graciosa", pro: true, texts: [txt("title", "JACKPOT"), txt("tag", "créditos: ∞")] },
+  { id: "fortune", name: "Galleta", kind: "graciosa", pro: true, texts: [txt("subtitle", "hoy tu captura brillará")] },
+  { id: "vineta", name: "Viñeta", kind: "graciosa", pro: true, texts: [txt("top", "¡ZAS!"), txt("tag", "CONTINUARÁ…")] },
+  { id: "garra", name: "Garra", kind: "graciosa", pro: true, texts: [txt("badge", "¡PREMIO!")] },
+  { id: "marcianitos", name: "Marcianitos", kind: "graciosa", pro: true, texts: [txt("tag", "HI 999999")] },
+  { id: "pixel", name: "Pixel", kind: "graciosa", pro: true, texts: [txt("tag", "PRESS START")] },
+  { id: "conspiracion", name: "Conspiración", kind: "graciosa", pro: true, texts: [txt("top", "¿CASUALIDAD?"), txt("badge", "NO CONFÍES")] },
+  { id: "glitch", name: "Glitch", kind: "graciosa", pro: true, texts: [txt("badge", "SISTEMA_CORRUPTO")] },
+  { id: "burbuja", name: "Burbuja", kind: "graciosa", pro: true, texts: [txt("top", "¡¿QUÉ?!")] },
+  { id: "lavalamp", name: "Lava", kind: "graciosa", pro: true, texts: [txt("tag", "groovy")] },
+  { id: "rockola", name: "Rockola", kind: "graciosa", pro: true, texts: [txt("title", "noches de rockola")] },
+  { id: "fiesta", name: "Fiesta", kind: "graciosa", pro: true, texts: [txt("title", "¡A CELEBRAR!")] },
 
   /* ================= EXCLUSIVOS · PRO (10) ================= */
   { id: "portada", name: "Portada", kind: "exclusiva", pro: true, texts: [txt("top", "Nº 42 · OTOÑO"), txt("title", "El gran titular"), txt("subtitle", "y el subtítulo de la historia"), txt("tag", "9,99 €")] },
